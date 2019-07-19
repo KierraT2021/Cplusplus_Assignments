@@ -1,0 +1,180 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <vector>
+
+
+class Cup{
+public:
+
+int return_size(std::string cup_size)
+{
+    if(cup_size=="tall"||cup_size=="Tall")
+    {
+        return 1;
+    }
+    else if(cup_size=="grande"||cup_size=="Grande")
+    {
+        return 2;
+    }
+    else if(cup_size=="venti"||cup_size=="Venti")
+    {
+        return 3;
+    }
+    else if(cup_size=="trenta"||cup_size=="Trenta")
+    {
+        return 4;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+};
+
+class Customer{
+public:
+std::vector<std::string>customer;
+std::vector<std::string>cup_size;
+
+Customer()
+{
+    std::ifstream inFile;
+    std::string line;
+    inFile.open("Customers.txt");
+
+
+    if(!inFile.is_open())
+    {
+        std::cout<<"Unable to open file."<<std::endl;
+        return;
+    }
+
+    while(!inFile.eof())
+    {
+        std::string intermediate;
+        std::string line_from_file;
+
+        getline(inFile,line_from_file);
+        std::stringstream delimit_line(line_from_file);
+        getline(delimit_line,intermediate,',');
+        customer.push_back(intermediate);
+        getline(delimit_line, intermediate);
+        cup_size.push_back(intermediate);
+    }
+}
+};
+
+class Louise{
+
+public:
+
+Cup size1;
+int batches;
+int cup_size;
+int chili;
+
+int fill_chili(int num)
+{
+   chili=num*5;
+   return chili;
+}
+
+void refill_chili()
+{
+
+    std::cout<<"How many more batches would you like to make?"<<std::endl;
+    std::cin>>batches;
+    int morechili=fill_chili(batches);
+    chili=chili+morechili;
+}
+
+int remaining_chili(int cup, int chilis)
+{
+chilis=chilis-cup;
+return chilis;
+}
+
+int check_chili(int chili_amount, int c_size)
+{
+    if(chili_amount<c_size)
+    {
+        std::string answer;
+        std::cout<<"Sorry not enough chili. Would you like to make another batch or quit?"<<std::endl;
+        std::cin>>answer;
+        if(answer=="quit"||answer=="Quit")
+        {
+            return 0;
+        }
+        else
+        {
+           refill_chili();
+           return 1;
+        }
+    }
+
+    else if(chili_amount>=c_size)
+    {
+        chili=remaining_chili(c_size, chili);
+        std::cout<<"Order served. Still got lots of chili!"<<std::endl;
+        return 2;
+    }
+}
+
+ int userinput(){
+     std::string answer;
+
+     std::cout<<"~~Welcome Louise~~"<<std::endl;
+
+     std::cout<<"How many batches of your famous chili are you making today?"<<std::endl;
+     std::cin>>batches;
+     chili=fill_chili(batches);
+
+     std::cout<<"Starting orders..."<<std::endl;
+     int cup_size;
+
+     while(true){
+       Customer c1("customers.txt");
+
+       for(int i=0;i<c1.customer.size();i++){
+            std::cout<<"--Customer "<<i+1<<": "<<c1.customer[i]<<"'s order is "<<c1.cup_size[i]<<"."<<std::endl;
+            cup_size=size1.return_size(c1.cup_size[i]);
+            int check=check_chili(chili, cup_size);
+
+            if(check==2){
+                chili=remaining_chili(cup_size,chili);
+            }
+
+            else if(check==0){
+                return 0;
+            }
+
+            std::cout<<"Continue with orders or take a break?"<<std::endl;
+            std::cin>>answer;
+
+            if(answer=="continue"||answer=="Continue"){
+                continue;
+            }
+
+            else if(answer=="break"||answer=="Break"){
+                std::cout<<"Ok. Press enter to continue when you're finished with your break."<<std::endl;
+
+                if(std::cin.get()=='\n'){
+                    continue;
+                }
+            }
+        }
+     }
+  }
+};
+
+int main(int argc, char ** argv)
+{
+
+Louise l1;
+l1.userinput()
+}
