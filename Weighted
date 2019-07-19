@@ -1,0 +1,87 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <stdio.h>
+
+//Function to identify the mass type
+int check_weight_type (std::string a)
+{
+    if(a=="kilos")
+    {
+       return 1;
+    }
+    else if(a=="pounds")
+    {
+       return 2;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//conversion from kilos to pounds or pounds to kilos
+float weight_conversion(int type, float weight)
+{
+    float answer;
+    //kilos to pounds
+    if(type==1)
+    {
+        answer=weight*2.2;
+        return answer;
+    }
+    //pounds to kilos
+    else if(type==2)
+    {
+        answer=weight*0.453592;
+        return answer;
+    }
+}
+int main()
+{
+    std::string userinput;
+    std::string type;
+    float weight;
+    int typereturn;
+
+
+    while(userinput!="exit"&&type!="exit")
+    {
+        type.clear();
+        std::cout<<"Please enter your name and weight:"<<std::endl;
+        std::cin>>userinput;
+
+        if(userinput=="exit"||userinput=="Exit")
+        {
+            std::cout<<"Exiting..."<<std::endl;
+            return 0;
+        }
+
+        std::cin>>weight;
+        std::cin>>type;
+
+
+        if(type=="\n")
+        {
+            std::cout<<"Not enough information"<<std::endl;
+        }
+        int typereturn=check_weight_type(type);
+        float weightconvert=weight_conversion(typereturn,weight);
+
+        if(typereturn==1)
+        {
+            std::cout<<"Hi "<<userinput<<"- you weigh "<<weightconvert<<" pounds."<<std::endl;
+        }
+        else if(typereturn==2)
+        {
+            std::cout<<"Hi "<<userinput<<"- you weigh "<<weightconvert<<" kilos."<<std::endl;
+        }
+        /**
+        else
+        {
+            std::cout<<"Please type the information in the format of: name weight type."<<std::endl;
+        }
+        */
+    }
+}
