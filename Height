@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+class Rider
+{
+  std::string name;
+
+  public:
+    int height;
+    Rider(std::string name, int height)
+    {
+        this->name=name;
+        this->height=height;
+    }
+
+    Rider(int height)
+    {
+        this->height=height;
+    }
+};
+
+class Amusement_park
+{
+    public:
+        int ride_num;
+        int num;
+        std::vector<std::string>rides;
+        std::vector <int> heights;
+
+        Amusement_park(int ride_num)
+        {
+
+          std::string temp;
+          int tempheight;
+          int check=0;
+
+
+          std::cout<<"~~Amusement Park Info~~"<<std::endl;
+
+          for(int i=0;i<ride_num;i++)
+          {
+            std::cout<<"Ride "<<(i+1)<<"- Enter minimum ride height and ride name:"<<std::endl;
+            std::cin>>tempheight;
+            std::cin>>temp;
+
+            rides.push_back(temp);
+            heights.push_back(tempheight);
+          }
+        }
+
+
+        Amusement_park get_ride(int num)
+        {
+            this->num=num;
+        }
+
+        void add_line(Rider r)
+        {
+            if(r.height>heights[num])
+            {
+                std::cout<<"-Adding rider to line.\n"<<std::endl;
+            }
+            else
+            {
+                std::cout<<"-Sorry can't add rider. Too short.\n"<<std::endl;
+            }
+        }
+
+
+};
+
+class Ride
+{
+public:
+    int num_rides;
+    std::vector <Rider> line;
+};
+
+
+int main(int argc, char ** argv)
+{
+    Rider r1("Yaris",45);
+    Rider r2(49);
+
+    Amusement_park a1(3);
+    a1.get_ride(1).add_line(r1);
+
+    Amusement_park a2(2);
+    a2.get_ride(1).add_line(r2);
+
+    return 0;
+}
