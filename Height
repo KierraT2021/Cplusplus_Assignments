@@ -1,0 +1,188 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <bits/stdc++.h>
+
+class Customer
+{
+public:
+std::string order;
+std::string meat;
+std::string rice;
+std::string addon;
+std::vector<float> prices;
+
+std::string answer;
+
+float day_total(std::vector<float> total)
+{
+    float total1=0;
+
+    for(int i=0;i<total.size()-1;i++)
+    {
+        total1=total1+total.at(i);
+    }
+
+    return total1;
+}
+
+void Order ()
+{
+restart:
+    std::cout<<"***Place your order***"<<std::endl;
+    std::cin.ignore();
+    std::cout<<"Burrito or Bowl?"<<std::endl;
+    getline(std::cin, answer);
+
+    if(answer.compare("Burrito")==0||answer.compare("burrito")==0||answer.compare("Bowl")==0||answer.compare("bowl")==0)
+       {
+           if(answer.compare("Burrito")==0||answer.compare("burrito")==0)
+            {
+                std::cout<<"Price will be $6.75\n"<<std::cout;
+                order=answer;
+                prices.push_back(6.75);
+            }
+            else if(answer.compare("Bowl")==0||answer.compare("bowl")==0)
+            {
+                std::cout<<"Price will be $6.50\n"<<std::endl;
+                order=answer;
+                prices.push_back(6.50);
+            }
+       }
+
+       std::cout<<"-Pick: Tofu, Steak, Chicken"<<std::endl;
+       getline(std::cin, meat);
+
+       std::cout<<"-Pick: Cilantro-Lime Brown (brown), Cilantro-Lime White (white)"<<std::endl;
+       getline(std::cin, rice);
+
+       std::cout<<"-Pick: Queso, Sour Cream, Fresh Tomato Salsa"<<std::endl;
+       getline(std::cin, addon);
+
+       std::cout<<"Confirm order (yes or no):"<<std::endl;
+
+        std::cout<<order<<": "<<meat<<", "<<rice<<", "<<addon<<std::endl;
+        getline(std::cin,answer);
+
+        if(answer.compare("yes")==0)
+        {
+            std::ifstream inFile;
+            std::string line;
+            inFile.open("Employees.txt");
+
+
+            if(!inFile.is_open())
+            {
+                std::cout<<"Unable to open file."<<std::endl;
+                return;
+            }
+
+            std::vector<std::string> First_name;
+            std::vector<std::string> Last_name;
+
+            while(!inFile.eof())
+            {
+            std::string intermediate;
+            std::string line_from_file;
+
+            getline(inFile,line_from_file);
+            std::stringstream delimit_line(line_from_file);
+            getline(delimit_line,intermediate,' ');
+            First_name.push_back(intermediate);
+            getline(delimit_line, intermediate);
+            Last_name.push_back(intermediate);
+            }
+
+            std::cout<<"Ok, "<<First_name.at(0)<<" will be delivering your order. Thank you."<<std::endl;
+        }
+        else
+        {
+            goto restart;
+        }
+    }
+
+
+};
+
+class Apply
+{
+
+public:
+
+void Application()
+{
+    std::string first;
+    std::string last;
+    std::string intermediate;
+    std::string answer;
+    std::vector<std::string> applicants;
+
+    std::cout<<"Enter your full name: "<<std::endl;
+    getline(std::cin, answer);
+
+    std::stringstream delimit(answer);
+
+    while(getline(delimit,intermediate,' '))
+    {
+        first=intermediate;
+        getline(delimit, intermediate);
+        last=intermediate;
+    }
+
+
+
+    std::cout<<"Newest delivery person: "<<first<<std::endl;
+    applicants.push_back(first+" "+last);
+}
+
+
+};
+
+int main(int argc, char**argv)
+{
+ bool check=true;
+ int answer;
+ Customer c1;
+ Apply a1;
+
+ std::cout<<"~~Ronnie's Delivery Service~~"<<std::endl;
+
+ while(check)
+ {
+     std::cout<<"------------------------\n"<<std::endl;
+     std::cout<<"Pick from the following menu:\n1. Customer\n2. Apply\n3. Exit"<<std::endl;
+     std::cin>>answer;
+
+     if(answer==1)
+     {
+         c1.Order();
+     }
+     else if(answer==2)
+     {
+         std::cin.ignore();
+         a1.Application();
+     }
+     else if(answer==3)
+     {
+         std::cout<<"Exiting..."<<std::endl;
+         float total=c1.day_total(c1.prices);
+         if(c1.prices.empty())
+         {
+             std::cout<<"No revenue was made."<<std::endl;
+         }
+         std::cout<<"Total made: $"<<total<<std::endl;
+
+         std::ofstream outf("Total.txt");
+
+         if(!outf.is_open())
+         {
+             std::cout<<"File write is unsuccessful! Exiting..."<<std::endl;
+             return 0;
+         }
+
+         outf<<total<<std::endl;
+    }
+}
+ }
